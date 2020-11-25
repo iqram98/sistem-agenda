@@ -16,7 +16,6 @@ const Splash = (props) => {
         props.navigation.replace("Login");
       } else {
         let value = JSON.parse(jsonValue);
-        console.log(value.email);
         Axios.get(
           `https://api.dirumahki.online/index.php/user?email=${value.email}&password=${value.password}`
         ).then((res) => {

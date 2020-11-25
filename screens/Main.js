@@ -30,9 +30,6 @@ const Main = (props) => {
     DataContext
   );
 
-  const [invite, setInvite] = useState(null);
-  const [vote, setVote] = useState(null);
-
   const [dataInvite, setDataInvite] = useState(null);
   const [dataVote, setDataVote] = useState(null);
 
@@ -53,26 +50,6 @@ const Main = (props) => {
       if (dataVote && dataInvite) {
         setNotif([].concat(dataInvite, dataVote));
       }
-    }
-  });
-
-  useEffect(() => {
-    if (!datas) {
-      Axios.get(
-        `https://api.dirumahki.online/index.php/invite?user_invite=1`
-      ).then((res) => {
-        setInvite(res.data);
-      });
-      Axios.get(`https://api.dirumahki.online/index.php/vote?user_vote=1`).then(
-        (res) => {
-          setVote(res.data);
-        }
-      );
-    }
-    if (!datas && invite && vote) {
-      setDatas(
-        [].concat(invite, vote).sort((a, b) => a.id_agenda - b.id_agenda)
-      );
     }
   });
 

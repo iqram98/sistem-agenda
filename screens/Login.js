@@ -26,7 +26,6 @@ const Login = (props) => {
     try {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem("@storage_Key", jsonValue);
-      console.log(jsonValue);
     } catch (e) {
       console.log(e);
     }
@@ -58,7 +57,7 @@ const Login = (props) => {
       <StatusBar style="dark" />
       <View style={styles.titleBox}>
         <Text style={styles.title1}>SISTEM INFORMASI</Text>
-        <Text style={styles.title2}>MANAJEMIN</Text>
+        <Text style={styles.title2}>MANAJEMEN</Text>
         <Text style={styles.title2}>LEGISLATIF</Text>
       </View>
       <View style={styles.loginBox}>
