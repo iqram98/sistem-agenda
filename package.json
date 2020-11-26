@@ -32,7 +32,8 @@
     "react-native-screens": "~2.10.1",
     "react-native-tab-view": "^2.15.2",
     "react-native-web": "~0.13.12",
-    "expo-notifications": "~0.7.2"
+    "expo-notifications": "~0.7.2",
+    "expo-permissions": "~9.3.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

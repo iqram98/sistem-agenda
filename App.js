@@ -5,6 +5,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+import { Notifications } from "expo";
+import * as Permissions from "expo-permissions";
 
 import Color from "./constants/Color";
 import Login from "./screens/Login";
@@ -13,7 +15,7 @@ import Home from "./screens/Home";
 import History from "./screens/History";
 import Profil from "./screens/Profil";
 import Main from "./screens/Main";
-import Notifications from "./screens/Notifications";
+import NotificationScreen from "./screens/Notifications";
 import Detail from "./screens/Detail";
 import { DrawerContent } from "./components/DrawerContent";
 import { DataProvider } from "./components/DataContext";
@@ -121,6 +123,36 @@ const DrawerStack = () => (
 );
 
 export default function App() {
+  useEffect(() => {
+    this.getPushNotificationPermissions();
+  });
+  getPushNotificationPermissions = async () => {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+    let finalStatus = existingStatus;
+
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+    if (existingStatus !== "granted") {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+
+    // Stop here if the user did not grant permissions
+    if (finalStatus !== "granted") {
+      return;
+    }
+    console.log(finalStatus);
+
+    // Get the token that uniquely identifies this device
+    console.log(
+      "Notification Token: ",
+      await Notifications.getExpoPushTokenAsync()
+    );
+  };
   return (
     <DataProvider>
       <NavigationContainer>
@@ -128,7 +160,10 @@ export default function App() {
           <HomeStack.Screen name="Splash" component={Splash} />
           <HomeStack.Screen name="Login" component={Login} />
           <HomeStack.Screen name="Main" component={DrawerStack} />
-          <HomeStack.Screen name="Notifications" component={Notifications} />
+          <HomeStack.Screen
+            name="Notifications"
+            component={NotificationScreen}
+          />
           <HomeStack.Screen name="Detail" component={Detail} />
         </HomeStack.Navigator>
       </NavigationContainer>
