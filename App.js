@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
-import { StyleSheet, View, Text, BackHandler } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { StyleSheet, View, Text, BackHandler, Platform } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
-import { Notifications } from "expo";
+import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 
 import Color from "./constants/Color";
@@ -122,37 +123,45 @@ const DrawerStack = () => (
   </Drawer.Navigator>
 );
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 export default function App() {
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
   useEffect(() => {
-    this.getPushNotificationPermissions();
-  });
-  getPushNotificationPermissions = async () => {
-    const { status: existingStatus } = await Permissions.getAsync(
-      Permissions.NOTIFICATIONS
+    registerForPushNotificationsAsync().then((token) =>
+      setExpoPushToken(token)
     );
-    let finalStatus = existingStatus;
 
-    // only ask if permissions have not already been determined, because
-    // iOS won't necessarily prompt the user a second time.
-    if (existingStatus !== "granted") {
-      // Android remote notification permissions are granted during the app
-      // install, so this will only ask on iOS
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      finalStatus = status;
-    }
-
-    // Stop here if the user did not grant permissions
-    if (finalStatus !== "granted") {
-      return;
-    }
-    console.log(finalStatus);
-
-    // Get the token that uniquely identifies this device
-    console.log(
-      "Notification Token: ",
-      await Notifications.getExpoPushTokenAsync()
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        setNotification(notification);
+      }
     );
-  };
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log(response);
+      }
+    );
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener);
+      Notifications.removeNotificationSubscription(responseListener);
+    };
+  }, []);
+
   return (
     <DataProvider>
       <NavigationContainer>
@@ -169,4 +178,37 @@ export default function App() {
       </NavigationContainer>
     </DataProvider>
   );
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Constants.isDevice) {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+
+  if (Platform.OS === "android") {
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  return token;
 }

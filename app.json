@@ -2,7 +2,7 @@
   "expo": {
     "name": "sistem-agenda",
     "slug": "sistem-agenda",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pondokinformatigitka.sistemagenda",
-      "buildNumber": "1.0.7"
+      "buildNumber": "1.0.8"
     },
     "android": {
       "useNextNotificationsApi": true,
@@ -28,7 +28,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.pondokinformatika.sistemagenda",
-      "versionCode": 7
+      "versionCode": 8
     },
     "web": {
       "favicon": "./assets/icon.png"

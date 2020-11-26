@@ -11,6 +11,7 @@ import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
 import Axios from "axios";
 import { StatusBar } from "expo-status-bar";
+import { useNavigation } from "@react-navigation/native";
 
 import Color from "../constants/Color";
 import { DataContext } from "../components/DataContext";
@@ -20,9 +21,12 @@ const Home = (props) => {
     DataContext
   );
 
+  const navigation = useNavigation();
+
   const [invite, setInvite] = useState(null);
   const [vote, setVote] = useState(null);
   const [dateMark, setDateMark] = useState(null);
+  const [idDate, setidDate] = useState(null);
 
   useEffect(() => {
     if (!datas) {
@@ -44,12 +48,18 @@ const Home = (props) => {
         .sort((a, b) => a.id_agenda - b.id_agenda);
       setDatas(newData);
     }
-    if (!dateMark && datas) {
+    if (!idDate && !dateMark && datas) {
       let mark = {};
+      let dateAndId = [];
       datas.map((data) => {
         mark[data.waktu_agenda.slice(0, 10)] = { marked: true };
+        dateAndId.push({
+          date: data.waktu_agenda.slice(0, 10),
+          id: data.id_agenda,
+        });
       });
       setDateMark(mark);
+      setidDate(dateAndId);
     }
   });
 
@@ -89,7 +99,10 @@ const Home = (props) => {
             }
           >
             <MaterialCommunityIcons
-              style={styles.buttonIcon}
+              style={[
+                styles.buttonIcon,
+                { backgroundColor: Color.buttonTertiary },
+              ]}
               name="vote-outline"
               size={30}
               color="white"
@@ -114,7 +127,7 @@ const Home = (props) => {
             }
           >
             <MaterialCommunityIcons
-              style={styles.buttonIcon}
+              style={[styles.buttonIcon, { backgroundColor: "#b298dc" }]}
               name="calendar"
               size={30}
               color="white"
@@ -139,7 +152,7 @@ const Home = (props) => {
             }
           >
             <FontAwesome5
-              style={styles.buttonIcon}
+              style={[styles.buttonIcon, { backgroundColor: "#dc98b0" }]}
               name="list-alt"
               size={30}
               color="white"
@@ -148,7 +161,7 @@ const Home = (props) => {
           </TouchableOpacity>
           <TouchableOpacity style={styles.buttonContainer}>
             <MaterialCommunityIcons
-              style={styles.buttonIcon}
+              style={[styles.buttonIcon, { backgroundColor: "#cadc98" }]}
               name="image-multiple"
               size={30}
               color="white"
@@ -156,9 +169,21 @@ const Home = (props) => {
             <Text style={{ color: Color.buttonSecondary }}>Foto-foto</Text>
           </TouchableOpacity>
         </View>
-        {dateMark ? (
+        {dateMark && idDate ? (
           <View style={styles.calenderContainer}>
-            <Calendar style={styles.calender} markedDates={dateMark} />
+            <Calendar
+              style={styles.calender}
+              markedDates={dateMark}
+              onDayPress={(day) => {
+                idDate.map((agenda) => {
+                  if (day.dateString === agenda.date) {
+                    navigation.push("Detail", {
+                      idAgenda: agenda.id,
+                    });
+                  }
+                });
+              }}
+            />
           </View>
         ) : null}
       </View>
@@ -205,7 +230,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   buttonIcon: {
-    backgroundColor: Color.buttonTertiary,
     alignItems: "center",
     justifyContent: "center",
     padding: 15,
