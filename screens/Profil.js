@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { DataContext } from "../components/DataContext";
 
 import Color from "../constants/Color";
@@ -18,6 +18,20 @@ const Profil = (props) => {
               }}
               style={styles.imageUser}
             />
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => props.navigation.navigate("EditProfil")}
+            >
+              <Text style={{ color: "white" }}>Edit Profil</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => props.navigation.navigate("GantiPassword")}
+            >
+              <Text style={{ color: "white" }}>Ubah Password</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.nameContainer}>
             <Text style={styles.name}>{dataUser[0].first_name}</Text>
@@ -44,12 +58,12 @@ const Profil = (props) => {
             <View style={styles.row}>
               <Text style={styles.col1}>Fraksi</Text>
               <Text style={styles.col2}>:</Text>
-              <Text style={styles.col3}>{dataUser[0].fraksi}</Text>
+              <Text style={styles.col3}>{dataUser[0].nama_fraksi}</Text>
             </View>
             <View style={styles.row}>
               <Text style={styles.col1}>Dapil</Text>
               <Text style={styles.col2}>:</Text>
-              <Text style={styles.col3}>{dataUser[0].dapil}</Text>
+              <Text style={styles.col3}>{dataUser[0].nama_dapil}</Text>
             </View>
             <View style={styles.row}>
               <Text style={styles.col1}>Jabatan</Text>
@@ -92,7 +106,6 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   nameContainer: {
-    marginVertical: 20,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -123,6 +136,20 @@ const styles = StyleSheet.create({
   },
   col3: {
     width: "60%",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    marginVertical: 20,
+    alignItems: "center",
+    justifyContent: "space-around",
+  },
+  btn: {
+    width: "35%",
+    height: 30,
+    backgroundColor: Color.buttonPrimary,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
   },
 });
 

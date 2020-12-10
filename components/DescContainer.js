@@ -8,15 +8,31 @@ const DescContainer = (props) => {
   const [checkMinOne, setCheckMinOne] = useState(false);
   let status;
   let color;
+  let span;
   switch (props.status) {
-    case "usulan":
-      status = "Vote";
+    case "vote":
+      status = "Detail Vote";
       color = Color.buttonPrimary;
+      span = "vote";
       break;
-    case "terjadwal":
-      status = "Hadiri";
+    case "undangan":
+      status = "Detail Undangan";
       color = Color.buttonSecondary;
+      span = "undangan";
       break;
+    case "terlaksana":
+      status = "Lihat Hasil";
+      color = Color.buttonTertiary;
+      span = "terlaksana";
+      break;
+    case "agenda_pribadi":
+      status = "Detail";
+      color = Color.backgroundPrimary;
+      span = "pribadi";
+      break;
+    default:
+      status = "Detail";
+      color = Color.backgroundPrimary;
   }
   const dateCheck = () => {
     const d = new Date();
@@ -43,7 +59,19 @@ const DescContainer = (props) => {
       </Text>
       <Text style={styles.descTime}>{props.time.slice(0, 5)}</Text>
       <View style={styles.buttonContainer}>
-        <Text style={styles.descStatus}>{props.status}</Text>
+        {props.status ? (
+          <Text
+            style={
+              props.status == "terlaksana"
+                ? styles.descStatusHijau
+                : styles.descStatus
+            }
+          >
+            {span}
+          </Text>
+        ) : (
+          <View></View>
+        )}
         {checkMinOne ? <Text style={styles.oneDay}>H-1</Text> : <View></View>}
       </View>
       <ButtonVote
@@ -73,6 +101,13 @@ const styles = StyleSheet.create({
     width: "35%",
     textAlign: "center",
     color: Color.buttonSecondary,
+    borderRadius: 10,
+  },
+  descStatusHijau: {
+    backgroundColor: Color.buttonPrimary,
+    width: "35%",
+    textAlign: "center",
+    color: "white",
     borderRadius: 10,
   },
   buttonContainer: {

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  BackHandler,
+  Alert,
 } from "react-native";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
@@ -23,35 +25,36 @@ const Home = (props) => {
 
   const navigation = useNavigation();
 
+  const [calendarData, setCalendarData] = useState(null);
   const [invite, setInvite] = useState(null);
   const [vote, setVote] = useState(null);
   const [dateMark, setDateMark] = useState(null);
   const [idDate, setidDate] = useState(null);
 
   useEffect(() => {
-    if (!datas) {
+    if (!calendarData) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/invite?user_invite=1`
+        `https://api.dirumahki.online/index.php/invite?user_invite=${dataUser[0].id}`
       ).then((res) => {
         setInvite(res.data);
       });
-      Axios.get(`https://api.dirumahki.online/index.php/vote?user_vote=1`).then(
-        (res) => {
-          setVote(res.data);
-        }
-      );
+      Axios.get(
+        `https://api.dirumahki.online/index.php/vote?user_vote=${dataUser[0].id}`
+      ).then((res) => {
+        setVote(res.data);
+      });
     }
 
-    if (!datas && invite && vote) {
+    if (!calendarData && invite && vote) {
       let newData = []
         .concat(invite, vote)
         .sort((a, b) => a.id_agenda - b.id_agenda);
-      setDatas(newData);
+      setCalendarData(newData);
     }
-    if (!idDate && !dateMark && datas) {
+    if (!idDate && !dateMark && calendarData) {
       let mark = {};
       let dateAndId = [];
-      datas.map((data) => {
+      calendarData.map((data) => {
         mark[data.waktu_agenda.slice(0, 10)] = { marked: true };
         dateAndId.push({
           date: data.waktu_agenda.slice(0, 10),
@@ -64,17 +67,27 @@ const Home = (props) => {
   });
 
   return (
-    <ScrollView>
-      <StatusBar style="light" />
+    <ScrollView style={{ flex: 1, backgroundColor: Color.backgroundPrimary }}>
       <View style={styles.home}>
+        <StatusBar style="light" />
         <View style={styles.container}>
-          <View style={styles.textContainer}>
+          <View style={styles.logoContainer}>
+            <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+              <Image
+                source={{
+                  uri: `https://dirumahki.online/assets/uploads/users/${dataUser[0].photo}`,
+                }}
+                style={styles.imageUser}
+              />
+            </TouchableOpacity>
             <Image
               source={{
                 uri: "https://dirumahki.online/assets/images/logo-sm.png",
               }}
               style={styles.logo}
             />
+          </View>
+          <View style={styles.textContainer}>
             <Text style={styles.title1}>SISTEM INFORMASI</Text>
             <Text style={styles.title2}>MANAJEMEN</Text>
             <Text style={styles.title2}>LEGISLATIF</Text>
@@ -90,6 +103,7 @@ const Home = (props) => {
                   screen: "Main",
                   params: {
                     screen: "Main",
+                    reset: "reset",
                     params: {
                       screen: "E-Vote",
                     },
@@ -118,6 +132,7 @@ const Home = (props) => {
                   screen: "Main",
                   params: {
                     screen: "Main",
+                    reset: "reset",
                     params: {
                       screen: "Undangan",
                     },
@@ -143,6 +158,7 @@ const Home = (props) => {
                   screen: "Main",
                   params: {
                     screen: "Main",
+                    reset: "reset",
                     params: {
                       screen: "Agenda",
                     },
@@ -159,14 +175,19 @@ const Home = (props) => {
             />
             <Text style={{ color: Color.buttonSecondary }}>Agenda</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => props.navigation.navigate("HasilKegiatan")}
+          >
             <MaterialCommunityIcons
               style={[styles.buttonIcon, { backgroundColor: "#cadc98" }]}
               name="image-multiple"
               size={30}
               color="white"
             />
-            <Text style={{ color: Color.buttonSecondary }}>Foto-foto</Text>
+            <Text style={{ color: Color.buttonSecondary, textAlign: "center" }}>
+              Hasil Kegiatan
+            </Text>
           </TouchableOpacity>
         </View>
         {dateMark && idDate ? (
@@ -177,9 +198,7 @@ const Home = (props) => {
               onDayPress={(day) => {
                 idDate.map((agenda) => {
                   if (day.dateString === agenda.date) {
-                    navigation.push("Detail", {
-                      idAgenda: agenda.id,
-                    });
+                    navigation.push("Main");
                   }
                 });
               }}
@@ -201,33 +220,35 @@ const styles = StyleSheet.create({
     height: 100,
     width: "80%",
     justifyContent: "space-between",
-    marginBottom: 300,
-    marginTop: 150,
+    marginBottom: 100,
+    marginTop: 50,
   },
   title1: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 14,
+    fontSize: 12,
   },
   title2: {
     color: "white",
-    fontSize: 50,
+    fontSize: 25,
     fontWeight: "bold",
   },
   dashboardContainer: {
     backgroundColor: "white",
     width: "90%",
-    height: 200,
+    height: 150,
     borderRadius: 10,
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "center",
-    marginVertical: 30,
+    marginBottom: 20,
+    paddingTop: 30,
   },
   buttonContainer: {
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 10,
+    marginHorizontal: 5,
+    width: "20%",
   },
   buttonIcon: {
     alignItems: "center",
@@ -248,6 +269,15 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderRadius: 5,
     width: 320,
+  },
+  imageUser: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+  },
+  logoContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 

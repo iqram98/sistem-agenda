@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "528652592069",
+    "firebase_url": "https://sistem-agenda.firebaseio.com",
+    "project_id": "sistem-agenda",
+    "storage_bucket": "sistem-agenda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:528652592069:android:1c9d21625a0136299161ac",
+        "android_client_info": {
+          "package_name": "com.pondokinformatika.sistemagenda"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "528652592069-dom82ipjb8vd94ll05097u8e5fmf9aiu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDS7RETAZmJZbhZvCIcsULvuKuKGtL_5lk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "528652592069-dom82ipjb8vd94ll05097u8e5fmf9aiu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

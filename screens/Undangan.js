@@ -29,7 +29,7 @@ const Undangan = (props) => {
 
   useEffect(() => {
     Axios.get(
-      "https://api.dirumahki.online/index.php/agenda?status_agenda=terjadwal&user=1"
+      "https://api.dirumahki.online/index.php/agenda?status_agenda=undangan&user=1"
     ).then((res) => {
       setInvites(res.data);
     });

@@ -8,19 +8,62 @@ import {
   TouchableOpacity,
   Keyboard,
   Alert,
+  BackHandler,
 } from "react-native";
 import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+import qs from "qs";
 
 import Color from "../constants/Color";
 import { DataContext } from "../components/DataContext";
 
 const Login = (props) => {
-  const [datas, setDatas, dataUser, setDataUser] = useContext(DataContext);
+  const [
+    datas,
+    setDatas,
+    dataUser,
+    setDataUser,
+    notif,
+    setNotif,
+    invite,
+    setInvite,
+    vote,
+    setVote,
+    terlaksana,
+    setTerlaksana,
+    token,
+    setToken,
+  ] = useContext(DataContext);
   const [input, setInput] = useState({
     email: "",
     password: "",
   });
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => setToken(token));
+    const backAction = () => {
+      Alert.alert("Hold on!", "Are you sure you want to go back?", [
+        {
+          text: "Cancel",
+          onPress: () => null,
+          style: "cancel",
+        },
+        { text: "YES", onPress: () => BackHandler.exitApp() },
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   const storeData = async (value) => {
     try {
@@ -81,6 +124,53 @@ const Login = (props) => {
       </View>
     </View>
   );
+  async function registerForPushNotificationsAsync() {
+    let token;
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Permissions.askAsync(
+          Permissions.NOTIFICATIONS
+        );
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        alert("Failed to get push token for push notification!");
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      console.log(token);
+    } else {
+      alert("Must use physical device for Push Notifications");
+    }
+
+    if (Platform.OS === "android") {
+      Notifications.setNotificationChannelAsync("default", {
+        name: "default",
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: "#FF231F7C",
+      });
+    }
+
+    const data = qs.stringify({
+      device_token: Device.deviceName,
+      nomor_token: token,
+    });
+    const headers = {
+      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+    };
+    Axios.post(
+      "https://api.dirumahki.online/index.php/token",
+      data,
+      headers
+    ).then((res) => console.log(res.data));
+
+    return token;
+  }
 };
 const styles = StyleSheet.create({
   login: {

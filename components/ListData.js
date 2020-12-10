@@ -10,7 +10,12 @@ const ListData = (props) => {
   return (
     <Card
       style={styles.card}
-      color={props.data.status_agenda === "terjadwal" ? "secondary" : "primary"}
+      color={
+        props.data.status_agenda === "undangan" ||
+        props.data.status_agenda === "terlaksana"
+          ? "secondary"
+          : "primary"
+      }
     >
       <DateContainer day={newDate[2]} month={`${newDate[1]}, ${newDate[0]}`} />
       <DescContainer

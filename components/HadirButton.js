@@ -24,6 +24,11 @@ const HadirButton = (props) => {
       agenda_invite: props.agenda,
       presence_invite: invite,
     });
+    const dataHistory = qs.stringify({
+      user_history: dataUser[0].id,
+      agenda_history: props.agenda,
+      nama_history: invite == 1 ? "Akan Hadir" : "Berhalangan Hadir",
+    });
     const headers = {
       "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
     };
@@ -32,6 +37,12 @@ const HadirButton = (props) => {
       data,
       headers
     ).then((res) => setInvite(res.data));
+    Axios.post(
+      "https://api.dirumahki.online/index.php/history",
+      dataHistory,
+      headers
+    ).then((res) => console.log(res.data));
+    props.resetHadir();
   };
 
   const handleReset = () => {
@@ -48,6 +59,7 @@ const HadirButton = (props) => {
       data,
       headers
     ).then((res) => setInvite(res.data));
+    props.resetHadir();
   };
 
   return (

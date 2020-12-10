@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { View, TouchableOpacity, StyleSheet, Image, Text } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -7,9 +7,12 @@ import Axios from "axios";
 import Color from "../constants/Color";
 import Semua from "../screens/Semua";
 import Usulan from "../screens/Usulan";
-import Terlaksana from "../screens/Terlaksana";
+import Terjadwal from "../screens/Terjadwal";
 import { StatusBar } from "expo-status-bar";
 import { DataContext } from "../components/DataContext";
+
+import * as Notifications from "expo-notifications";
+import RNRestart from "react-native-restart";
 
 const TopTab = createMaterialTopTabNavigator();
 
@@ -20,28 +23,76 @@ const TopTabStack = (props) => (
     backBehavior="initialRoute"
   >
     <TopTab.Screen name="E-Vote" component={Usulan} />
-    <TopTab.Screen name="Undangan" component={Terlaksana} />
+    <TopTab.Screen name="Undangan" component={Terjadwal} />
     <TopTab.Screen refresh={props.refresh} name="Agenda" component={Semua} />
   </TopTab.Navigator>
 );
 
 const Main = (props) => {
-  const [datas, setDatas, dataUser, setDataUser, notif, setNotif] = useContext(
-    DataContext
-  );
+  const [
+    datas,
+    setDatas,
+    dataUser,
+    setDataUser,
+    notif,
+    setNotif,
+    invite,
+    setInvite,
+    vote,
+    setVote,
+    terlaksana,
+    setTerlaksana,
+    token,
+    setToken,
+    pribadi,
+    setPribadi,
+  ] = useContext(DataContext);
 
   const [dataInvite, setDataInvite] = useState(null);
   const [dataVote, setDataVote] = useState(null);
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  Notifications.setNotificationHandler({
+    handleNotification: async (notif) => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
 
   useEffect(() => {
-    if (!dataInvite) {
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        setNotification(notification);
+      }
+    );
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log(response);
+        RNRestart.Restart();
+      }
+    );
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener);
+      Notifications.removeNotificationSubscription(responseListener);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!notif) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/invite?user_invite=1&notif=0`
+        `https://api.dirumahki.online/index.php/invite?user_invite=${dataUser[0].id}&notif=0`
       ).then((res) => {
         setDataInvite(res.data);
       });
       Axios.get(
-        `https://api.dirumahki.online/index.php/vote?user_vote=1&notif=0`
+        `https://api.dirumahki.online/index.php/vote?user_vote=${dataUser[0].id}&notif=0`
       ).then((res) => {
         setDataVote(res.data);
       });
@@ -53,19 +104,56 @@ const Main = (props) => {
     }
   });
 
+  useEffect(() => {
+    if (!datas) {
+      Axios.get(
+        `https://api.dirumahki.online/index.php/agenda?user=${dataUser[0].id}`
+      ).then((res) => {
+        setDatas(res.data.reverse());
+      });
+      // Axios.get(
+      //   `https://api.dirumahki.online/index.php/vote?user_vote=${dataUser[0].id}`
+      // ).then((res) => {
+      //   setVote(res.data);
+      // });
+      // Axios.get(
+      //   `https://api.dirumahki.online/index.php/agenda?status_agenda=terlaksana&user=${dataUser[0].id}`
+      // ).then((res) => {
+      //   setTerlaksana(res.data);
+      // });
+      // Axios.get(
+      //   `https://api.dirumahki.online/index.php/agenda?status_agenda=agenda_pribadi&user=${dataUser[0].id}`
+      // ).then((res) => {
+      //   setPribadi(res.data);
+      // });
+    }
+
+    // if (!datas && invite && vote && terlaksana && pribadi) {
+    //   let newData = []
+    //     .concat(invite, vote, terlaksana, pribadi)
+    //     .sort((a, b) => a.id_agenda - b.id_agenda)
+    //     .reverse();
+    //   setDatas(newData);
+    // }
+  });
+
   return (
     <View style={styles.main}>
       <StatusBar style="dark" />
       <View style={styles.header}>
-        <Image
-          source={{
-            uri: `https://dirumahki.online/assets/uploads/users/${dataUser[0].photo}`,
-          }}
-          style={styles.imageUser}
-        />
+        <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+          <Image
+            source={{
+              uri: `https://dirumahki.online/assets/uploads/users/${dataUser[0].photo}`,
+            }}
+            style={styles.imageUser}
+          />
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.notifContainer}
-          onPress={() => props.navigation.navigate("Notifications")}
+          onPress={() => {
+            props.navigation.navigate("Notifications");
+          }}
         >
           <MaterialCommunityIcons name="bell-outline" color="black" size={30} />
 

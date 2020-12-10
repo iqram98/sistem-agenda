@@ -1,14 +1,15 @@
 {
   "expo": {
-    "name": "sistem-agenda",
-    "slug": "sistem-agenda",
-    "version": "1.0.8",
+    "name": "Simleg",
+    "slug": "Simleg",
+    "privacy": "public",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#3198AE"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -19,16 +20,16 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.pondokinformatigitka.sistemagenda",
-      "buildNumber": "1.0.8"
+      "buildNumber": "1.2.0"
     },
     "android": {
-      "useNextNotificationsApi": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.pondokinformatika.sistemagenda",
-      "versionCode": 8
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 20
     },
     "web": {
       "favicon": "./assets/icon.png"

@@ -24,21 +24,10 @@ const VoteButton = (props) => {
       agenda_vote: props.agenda,
       is_vote: vote,
     });
-    const headers = {
-      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-    };
-    Axios.put(
-      "https://api.dirumahki.online/index.php/vote",
-      data,
-      headers
-    ).then((res) => setVote(res.data));
-  };
-
-  const handleReset = () => {
-    const data = qs.stringify({
-      user_vote: dataUser[0].id,
-      agenda_vote: props.agenda,
-      is_vote: "",
+    const dataHistory = qs.stringify({
+      user_history: dataUser[0].id,
+      agenda_history: props.agenda,
+      nama_history: vote == 1 ? "Vote Ya" : "Vote No",
     });
     const headers = {
       "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
@@ -48,6 +37,39 @@ const VoteButton = (props) => {
       data,
       headers
     ).then((res) => setVote(res.data));
+    Axios.post(
+      "https://api.dirumahki.online/index.php/history",
+      dataHistory,
+      headers
+    ).then((res) => console.log(res.data));
+    props.resetVote();
+  };
+
+  const handleReset = () => {
+    const data = qs.stringify({
+      user_vote: dataUser[0].id,
+      agenda_vote: props.agenda,
+      is_vote: "",
+    });
+    const dataHistory = qs.stringify({
+      user_history: dataUser[0].id,
+      agenda_history: props.agenda,
+      nama_history: vote == 1 ? "Vote Ya" : "Vote No",
+    });
+    const headers = {
+      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+    };
+    Axios.put(
+      "https://api.dirumahki.online/index.php/vote",
+      data,
+      headers
+    ).then((res) => setVote(res.data));
+    Axios.post(
+      "https://api.dirumahki.online/index.php/history",
+      dataHistory,
+      headers
+    ).then((res) => console.log(res.data));
+    props.resetVote();
   };
 
   return (

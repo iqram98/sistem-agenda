@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Axios from "axios";
@@ -21,7 +21,7 @@ const Splash = (props) => {
         ).then((res) => {
           setDataUser(res.data);
           if (typeof res.data === "string") {
-            Alert.alert("Login", "Username atau Password Salah");
+            props.navigation.replace("Login");
           } else {
             props.navigation.replace("Main", {
               screen: "Home",
@@ -34,6 +34,7 @@ const Splash = (props) => {
     }
   };
   getData();
+
   return <View style={styles.screem}></View>;
 };
 const styles = StyleSheet.create({

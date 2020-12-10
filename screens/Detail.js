@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  Linking,
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import HTMLView from "react-native-htmlview";
@@ -21,115 +22,70 @@ import HadirButton from "../components/HadirButton";
 
 const Detail = (props) => {
   const { idAgenda } = props.route.params;
-  const [datas, setDatas, dataUser, setDataUser] = useContext(DataContext);
+  const [datas, setDatas, dataUser, setDataUser, notif, setNotif] = useContext(
+    DataContext
+  );
   const [detailData, setDetailData] = useState(null);
-  const [jumlahVoteYes, setJumlahVoteYes] = useState(null);
-  const [jumlahVoteNo, setJumlahVoteNo] = useState(null);
+
   const [jumlahBelumVote, setJumlahBelumVote] = useState(null);
-  const [jumlahHadirYes, setJumlahHadirYes] = useState(null);
-  const [jumlahHadirNo, setJumlahHadirNo] = useState(null);
   const [jumlahBelumPilih, setJumlahBelumPilih] = useState(null);
+  const [ubahNotif, setUbahNotif] = useState(null);
 
   useEffect(() => {
     if (detailData === null) {
       let newData = datas.find((data) => data.id_agenda === idAgenda);
       setDetailData(newData);
     }
-  });
 
-  useEffect(() => {
-    if (!jumlahVoteYes && detailData && detailData.status_agenda === "usulan") {
-      Axios.get(
-        `https://api.dirumahki.online/index.php/vote/jumlah/${idAgenda}/1`
-      ).then((res) => setJumlahVoteYes(res.data.toString()));
-    }
-  });
-
-  useEffect(() => {
-    if (!jumlahVoteNo && detailData && detailData.status_agenda === "usulan") {
-      Axios.get(
-        `https://api.dirumahki.online/index.php/vote/jumlah/${idAgenda}/0`
-      ).then((res) => setJumlahVoteNo(res.data.toString()));
-    }
-  });
-
-  useEffect(() => {
-    if (
-      !jumlahBelumVote &&
-      detailData &&
-      detailData.status_agenda === "usulan"
-    ) {
+    if (!jumlahBelumVote && detailData && detailData.status_agenda === "vote") {
       Axios.get(
         `https://api.dirumahki.online/index.php/vote/jumlah/${idAgenda}`
-      ).then((res) => setJumlahBelumVote(res.data.toString()));
+      ).then((res) => setJumlahBelumVote(res.data));
     }
-  });
 
-  useEffect(() => {
-    if (
-      !jumlahHadirYes &&
-      detailData &&
-      detailData.status_agenda === "terjadwal"
-    ) {
-      Axios.get(
-        `https://api.dirumahki.online/index.php/invite/jumlah/${idAgenda}/1`
-      ).then((res) => setJumlahHadirYes(res.data.toString()));
-    }
-  });
-  useEffect(() => {
-    if (
-      !jumlahHadirNo &&
-      detailData &&
-      detailData.status_agenda === "terjadwal"
-    ) {
-      Axios.get(
-        `https://api.dirumahki.online/index.php/invite/jumlah/${idAgenda}/0`
-      ).then((res) => setJumlahHadirNo(res.data.toString()));
-    }
-  });
-
-  useEffect(() => {
     if (
       !jumlahBelumPilih &&
       detailData &&
-      detailData.status_agenda === "terjadwal"
+      detailData.status_agenda === "undangan"
     ) {
       Axios.get(
         `https://api.dirumahki.online/index.php/invite/jumlah/${idAgenda}`
-      ).then((res) => setJumlahBelumPilih(res.data.toString()));
+      ).then((res) => setJumlahBelumPilih(res.data));
+    }
+
+    if (!ubahNotif && detailData && detailData.status_agenda === "undangan") {
+      const data = qs.stringify({
+        user_invite: dataUser[0].id,
+        agenda_invite: detailData.id_agenda,
+        notif: "1",
+      });
+      const headers = {
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      };
+      Axios.put(
+        "https://api.dirumahki.online/index.php/invite",
+        data,
+        headers
+      ).then();
+    }
+    if (!ubahNotif && detailData && detailData.status_agenda === "vote") {
+      const data = qs.stringify({
+        user_vote: dataUser[0].id,
+        agenda_vote: detailData.id_agenda,
+        notif: "1",
+      });
+      const headers = {
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      };
+      Axios.put(
+        "https://api.dirumahki.online/index.php/vote",
+        data,
+        headers
+      ).then();
+      //setNotif(null);
     }
   });
 
-  if (detailData && detailData.status_agenda === "terjadwal") {
-    const data = qs.stringify({
-      user_invite: dataUser[0].id,
-      agenda_invite: detailData.id_agenda,
-      notif: "1",
-    });
-    const headers = {
-      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-    };
-    Axios.put(
-      "https://api.dirumahki.online/index.php/invite",
-      data,
-      headers
-    ).then();
-  }
-  if (detailData && detailData.status_agenda === "usulan") {
-    const data = qs.stringify({
-      user_vote: dataUser[0].id,
-      agenda_vote: detailData.id_agenda,
-      notif: "1",
-    });
-    const headers = {
-      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-    };
-    Axios.put(
-      "https://api.dirumahki.online/index.php/vote",
-      data,
-      headers
-    ).then();
-  }
   return (
     <ScrollView style={styles.screen}>
       {detailData !== null ? (
@@ -166,55 +122,112 @@ const Detail = (props) => {
               stylesheet={richTextStyles}
             />
           </View>
-          {detailData.status_agenda === "usulan" ? (
+          {detailData.status_agenda == "terlaksana" ? (
+            <TouchableOpacity
+              onPress={() =>
+                props.navigation.navigate("ListUser", {
+                  idAgenda,
+                })
+              }
+            >
+              <View style={styles.buttonDraft}>
+                <Text>Daftar Peserta</Text>
+              </View>
+            </TouchableOpacity>
+          ) : null}
+          {detailData.draft_agenda !== "" ? (
+            <TouchableOpacity
+              style={styles.buttonDraft}
+              onPress={() => {
+                Linking.openURL(
+                  `https://dirumahki.online/assets/uploads/draft/${detailData.draft_agenda}`
+                );
+              }}
+            >
+              <Text style={{ color: "white" }}>Unduh Lampiran Rapat</Text>
+            </TouchableOpacity>
+          ) : (
+            <Text style={styles.tidakDraft}>Belum Ada Lampiran Rapat</Text>
+          )}
+          {detailData.status_agenda === "vote" ? (
             <View>
-              <VoteButton agenda={detailData.id_agenda} />
-              {jumlahBelumVote && jumlahVoteYes && jumlahVoteNo ? (
+              <VoteButton
+                resetVote={() => setJumlahBelumVote(null)}
+                agenda={detailData.id_agenda}
+              />
+              {jumlahBelumVote ? (
                 <View style={styles.jumlahContainer}>
                   <View style={styles.iconContainer}>
                     <AntDesign name="checkcircle" size={24} color="green" />
-                    <Text>{jumlahVoteYes}</Text>
+                    <Text>{jumlahBelumVote.Ya}</Text>
                   </View>
                   <View style={styles.iconContainer}>
                     <Entypo name="circle-with-cross" size={24} color="red" />
 
-                    <Text>{jumlahVoteNo}</Text>
+                    <Text>{jumlahBelumVote.Tidak}</Text>
                   </View>
                   <View style={styles.iconContainer}>
                     <AntDesign name="questioncircle" size={24} color="blue" />
-                    <Text>{jumlahBelumVote}</Text>
+                    <Text>{jumlahBelumVote.Belum}</Text>
                   </View>
                 </View>
               ) : (
-                <View></View>
+                <View
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Text>Loading...</Text>
+                </View>
+              )}
+            </View>
+          ) : detailData.status_agenda === "undangan" ? (
+            <View>
+              <HadirButton agenda={detailData.id_agenda} />
+              {jumlahBelumPilih ? (
+                <View style={styles.jumlahContainer}>
+                  <View style={styles.iconContainer}>
+                    <AntDesign name="checkcircle" size={24} color="green" />
+                    <Text>{jumlahBelumPilih.Ya}</Text>
+                  </View>
+                  <View style={styles.iconContainer}>
+                    <Entypo name="circle-with-cross" size={24} color="red" />
+                    <Text>{jumlahBelumPilih.Tidak}</Text>
+                  </View>
+                  <View style={styles.iconContainer}>
+                    <AntDesign name="questioncircle" size={24} color="blue" />
+                    <Text>{jumlahBelumPilih.Belum}</Text>
+                  </View>
+                </View>
+              ) : (
+                <View
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Text>Loading...</Text>
+                </View>
               )}
             </View>
           ) : (
             <View>
-              <HadirButton agenda={detailData.id_agenda} />
-              {jumlahBelumPilih && jumlahHadirYes && jumlahHadirNo ? (
-                <View style={styles.jumlahContainer}>
-                  <View style={styles.iconContainer}>
-                    <AntDesign name="checkcircle" size={24} color="green" />
-                    <Text>{jumlahHadirYes}</Text>
-                  </View>
-                  <View style={styles.iconContainer}>
-                    <Entypo name="circle-with-cross" size={24} color="red" />
-                    <Text>{jumlahHadirNo}</Text>
-                  </View>
-                  <View style={styles.iconContainer}>
-                    <AntDesign name="questioncircle" size={24} color="blue" />
-                    <Text>{jumlahBelumPilih}</Text>
-                  </View>
-                </View>
+              {detailData.hasil_agenda !== "" ? (
+                <TouchableOpacity
+                  style={styles.buttonHasil}
+                  onPress={() => {
+                    Linking.openURL(
+                      `https://dirumahki.online/assets/uploads/draft/${detailData.hasil_agenda}`
+                    );
+                  }}
+                >
+                  <Text style={{ color: "white" }}>Unduh Hasil Rapat</Text>
+                </TouchableOpacity>
               ) : (
-                <View></View>
+                <Text style={styles.tidakDraft}>Belum Ada Hasil Rapat</Text>
               )}
             </View>
           )}
         </View>
       ) : (
-        <ActivityIndicator />
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Text>Loading...</Text>
+        </View>
       )}
     </ScrollView>
   );
@@ -272,6 +285,31 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     width: "15%",
+  },
+  buttonHasil: {
+    width: "60%",
+    alignSelf: "center",
+    backgroundColor: Color.buttonSecondary,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    borderRadius: 10,
+    marginVertical: 10,
+  },
+  buttonDraft: {
+    width: "60%",
+    alignSelf: "center",
+    backgroundColor: Color.buttonTertiary,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    borderRadius: 10,
+    marginVertical: 10,
+  },
+  tidakDraft: {
+    alignSelf: "center",
+    color: "red",
+    marginVertical: 10,
   },
 });
 
