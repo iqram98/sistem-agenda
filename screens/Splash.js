@@ -17,7 +17,7 @@ const Splash = (props) => {
       } else {
         let value = JSON.parse(jsonValue);
         Axios.get(
-          `https://api.dirumahki.online/index.php/user?email=${value.email}&password=${value.password}`
+          `https://api.simleg-dprdsulteng.com/index.php/user?email=${value.email}&password=${value.password}`
         ).then((res) => {
           setDataUser(res.data);
           if (typeof res.data === "string") {

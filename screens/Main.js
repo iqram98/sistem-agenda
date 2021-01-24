@@ -87,12 +87,12 @@ const Main = (props) => {
   useEffect(() => {
     if (!notif) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/invite?user_invite=${dataUser[0].id}&notif=0`
+        `https://api.simleg-dprdsulteng.com/index.php/invite?user_invite=${dataUser[0].id}&notif=0`
       ).then((res) => {
         setDataInvite(res.data);
       });
       Axios.get(
-        `https://api.dirumahki.online/index.php/vote?user_vote=${dataUser[0].id}&notif=0`
+        `https://api.simleg-dprdsulteng.com/index.php/vote?user_vote=${dataUser[0].id}&notif=0`
       ).then((res) => {
         setDataVote(res.data);
       });
@@ -107,22 +107,22 @@ const Main = (props) => {
   useEffect(() => {
     if (!datas) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/agenda?user=${dataUser[0].id}`
+        `https://api.simleg-dprdsulteng.com/index.php/agenda?user=${dataUser[0].id}`
       ).then((res) => {
         setDatas(res.data.reverse());
       });
       // Axios.get(
-      //   `https://api.dirumahki.online/index.php/vote?user_vote=${dataUser[0].id}`
+      //   `https://api.simleg-dprdsulteng.com/index.php/vote?user_vote=${dataUser[0].id}`
       // ).then((res) => {
       //   setVote(res.data);
       // });
       // Axios.get(
-      //   `https://api.dirumahki.online/index.php/agenda?status_agenda=terlaksana&user=${dataUser[0].id}`
+      //   `https://api.simleg-dprdsulteng.com/index.php/agenda?status_agenda=terlaksana&user=${dataUser[0].id}`
       // ).then((res) => {
       //   setTerlaksana(res.data);
       // });
       // Axios.get(
-      //   `https://api.dirumahki.online/index.php/agenda?status_agenda=agenda_pribadi&user=${dataUser[0].id}`
+      //   `https://api.simleg-dprdsulteng.com/index.php/agenda?status_agenda=agenda_pribadi&user=${dataUser[0].id}`
       // ).then((res) => {
       //   setPribadi(res.data);
       // });
@@ -144,7 +144,7 @@ const Main = (props) => {
         <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
           <Image
             source={{
-              uri: `https://dirumahki.online/assets/uploads/users/${dataUser[0].photo}`,
+              uri: `https://i.imgur.com/${dataUser[0].photo}`,
             }}
             style={styles.imageUser}
           />

@@ -27,6 +27,9 @@ import QueryString from "qs";
 
 const EditProfil = (props) => {
   const [datas, setDatas, dataUser, setDataUser] = useContext(DataContext);
+  const [photo, setPhoto] = useState(dataUser[0].photo);
+  const [simpanBool, setSimpanBool] = useState(null);
+  const [loading, setLoading] = useState(null);
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [input, setInput] = useState({
@@ -49,116 +52,13 @@ const EditProfil = (props) => {
   useEffect(() => {
     if (!fraksiData && !dapilData) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/user/dapil`
+        `https://api.simleg-dprdsulteng.com/index.php/user/dapil`
       ).then((res) => setDapilData(res.data));
       Axios.get(
-        `https://api.dirumahki.online/index.php/user/fraksi`
+        `https://api.simleg-dprdsulteng.com/index.php/user/fraksi`
       ).then((res) => setFraksiData(res.data));
     }
   });
-
-  // const _maybeRenderUploadingOverlay = () => {
-  //   if (uploading) {
-  //     return (
-  //       <View style={[StyleSheet.absoluteFill, styles.maybeRenderUploading]}>
-  //         <ActivityIndicator color="#fff" size="large" />
-  //       </View>
-  //     );
-  //   }
-  // };
-
-  // const _maybeRenderImage = () => {
-  //   if (!image) {
-  //     return;
-  //   }
-
-  //   return (
-  //     <View style={styles.maybeRenderContainer}>
-  //       <View style={styles.maybeRenderImageContainer}>
-  //         <Image source={{ uri: image }} style={styles.maybeRenderImage} />
-  //       </View>
-
-  //       <Text
-  //         onPress={_copyToClipboard}
-  //         onLongPress={_share}
-  //         style={styles.maybeRenderImageText}
-  //       >
-  //         {image}
-  //       </Text>
-  //     </View>
-  //   );
-  // };
-
-  // const _share = () => {
-  //   Share.share({
-  //     message: image,
-  //     title: "Check out this photo",
-  //     url: image,
-  //   });
-  // };
-
-  // const _copyToClipboard = () => {
-  //   Clipboard.setString(image);
-  //   alert("Copied image URL to clipboard");
-  // };
-
-  // const _takePhoto = async () => {
-  //   const { status: cameraPerm } = await Permissions.askAsync(
-  //     Permissions.CAMERA
-  //   );
-
-  //   const { status: cameraRollPerm } = await Permissions.askAsync(
-  //     Permissions.CAMERA_ROLL
-  //   );
-
-  //   // only if user allows permission to camera AND camera roll
-  //   if (cameraPerm === "granted" && cameraRollPerm === "granted") {
-  //     let pickerResult = await ImagePicker.launchCameraAsync({
-  //       allowsEditing: true,
-  //       aspect: [4, 3],
-  //     });
-
-  //     _handleImagePicked(pickerResult);
-  //   }
-  // };
-
-  // const _pickImage = async () => {
-  //   const { status: cameraRollPerm } = await Permissions.askAsync(
-  //     Permissions.CAMERA_ROLL
-  //   );
-
-  //   // only if user allows permission to camera roll
-  //   if (cameraRollPerm === "granted") {
-  //     let pickerResult = await ImagePicker.launchImageLibraryAsync({
-  //       allowsEditing: true,
-  //       aspect: [4, 3],
-  //     });
-
-  //     _handleImagePicked(pickerResult);
-  //   }
-  // };
-
-  // const _handleImagePicked = async (pickerResult) => {
-  //   let uploadResponse, uploadResult;
-
-  //   try {
-  //     setUploading(true);
-
-  //     if (!pickerResult.cancelled) {
-  //       uploadResponse = await uploadImageAsync(pickerResult.uri);
-  //       uploadResult = await uploadResponse.json();
-
-  //       setImage(uploadResult.location);
-  //     }
-  //   } catch (e) {
-  //     console.log({ uploadResponse });
-  //     console.log({ uploadResult });
-  //     console.log({ e });
-  //     alert("Upload failed, sorry :(");
-  //   } finally {
-  //     setUploading(false);
-  //   }
-  // };
 
   const handleSimpan = () => {
     const data = QueryString.stringify(input);
@@ -166,7 +66,7 @@ const EditProfil = (props) => {
       "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
     };
     Axios.put(
-      "https://api.dirumahki.online/index.php/user",
+      "https://api.simleg-dprdsulteng.com/index.php/user",
       data,
       headers
     ).then((res) =>
@@ -182,6 +82,7 @@ const EditProfil = (props) => {
         },
       ])
     );
+    alert("Berhasil Mengubah!");
     props.navigation.navigate("Main");
   };
 
@@ -205,13 +106,6 @@ const EditProfil = (props) => {
             </Text>
           </View>
           <ScrollView style={styles.formContainer}>
-            {/* <Button
-              onPress={_pickImage}
-              title="Pick an image from camera roll"
-            />
-
-            <Button onPress={_takePhoto} title="Take a photo" /> */}
-
             <View style={styles.formGroup}>
               <Text style={styles.label}>Nama Depan</Text>
               <TextInput
@@ -337,29 +231,42 @@ const EditProfil = (props) => {
                 onChangeText={(text) => setInput({ ...input, riwayat: text })}
               />
             </View>
-            <View style={styles.btnContainer}>
-              <TouchableOpacity
-                style={{
-                  ...styles.btn,
-                  backgroundColor: Color.buttonPrimary,
-                }}
-                onPress={handleSimpan}
-              >
-                <Text style={{ color: "white" }}>Simpan</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  ...styles.btn,
-                  backgroundColor: Color.buttonSecondary,
-                }}
-                onPress={() => props.navigation.navigate("Main")}
-              >
-                <Text style={{ color: "white" }}>Kembali</Text>
-              </TouchableOpacity>
+            <View>
+              {loading ? (
+                <View style={styles.btnContainer}>
+                  <View
+                    style={{
+                      ...styles.btn,
+                      backgroundColor: Color.buttonPrimary,
+                    }}
+                  >
+                    <Text>Mengunggah ...</Text>
+                  </View>
+                </View>
+              ) : (
+                <View style={styles.btnContainer}>
+                  <TouchableOpacity
+                    style={{
+                      ...styles.btn,
+                      backgroundColor: Color.buttonPrimary,
+                    }}
+                    onPress={handleSimpan}
+                  >
+                    <Text style={{ color: "white" }}>Simpan</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      ...styles.btn,
+                      backgroundColor: Color.buttonSecondary,
+                    }}
+                    onPress={() => props.navigation.navigate("Main")}
+                  >
+                    <Text style={{ color: "white" }}>Kembali</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
           </ScrollView>
-          {/* {_maybeRenderImage()}
-          {_maybeRenderUploadingOverlay()} */}
         </View>
       ) : (
         <View></View>
@@ -367,39 +274,11 @@ const EditProfil = (props) => {
     </TouchableWithoutFeedback>
   );
 };
-// async function uploadImageAsync(uri) {
-//   let apiUrl = "https://dirumahki.online/assets/uploads/users/";
-
-//   // Note:
-//   // Uncomment this if you want to experiment with local server
-//   //
-//   // if (Constants.isDevice) {
-//   //   apiUrl = `https://your-ngrok-subdomain.ngrok.io/upload`;
-//   // } else {
-//   //   apiUrl = `http://localhost:3000/upload`
-//   // }
-
-//   let uriParts = uri.split(".");
-//   let fileType = uriParts[uriParts.length - 1];
-
-//   let formData = new FormData();
-//   formData.append("photo", {
-//     uri,
-//     name: `photo.${fileType}`,
-//     type: `image/${fileType}`,
-//   });
-
-//   let options = {
-//     method: "POST",
-//     body: formData,
-//     headers: {
-//       Accept: "application/json",
-//       "Content-Type": "multipart/form-data",
-//     },
-//   };
-
-//   return fetch(apiUrl, options);
-// }
+const createFormData = (photo, body) => {
+  const data = new FormData();
+  data.append("image", photo.base64);
+  return data;
+};
 
 const styles = StyleSheet.create({
   screen: {

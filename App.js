@@ -24,6 +24,8 @@ import GantiPassword from "./screens/GantiPassword";
 import HasilKegiatan from "./screens/HasilKegiatan";
 import DetailHasil from "./screens/DetailHasil";
 import HalamanPdf from "./screens/HalamanPdf";
+import ListFoto from "./screens/ListFoto";
+import UbahFoto from "./screens/UbahFoto";
 import { DrawerContent } from "./components/DrawerContent";
 import { DataProvider } from "./components/DataContext";
 
@@ -151,6 +153,8 @@ export default function App() {
           <HomeStack.Screen name="HasilKegiatan" component={HasilKegiatan} />
           <HomeStack.Screen name="DetailHasil" component={DetailHasil} />
           <HomeStack.Screen name="HalamanPdf" component={HalamanPdf} />
+          <HomeStack.Screen name="ListFoto" component={ListFoto} />
+          <HomeStack.Screen name="UbahFoto" component={UbahFoto} />
         </HomeStack.Navigator>
       </NavigationContainer>
     </DataProvider>

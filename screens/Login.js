@@ -79,7 +79,7 @@ const Login = (props) => {
       Alert.alert("Login", "Harap Mengisi Email & Password");
     } else {
       Axios.get(
-        `https://api.dirumahki.online/index.php/user?email=${input.email}&password=${input.password}`
+        `https://api.simleg-dprdsulteng.com/index.php/user?email=${input.email}&password=${input.password}`
       ).then((res) => {
         setDataUser(res.data);
         if (typeof res.data === "string") {
@@ -164,7 +164,7 @@ const Login = (props) => {
       "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
     };
     Axios.post(
-      "https://api.dirumahki.online/index.php/token",
+      "https://api.simleg-dprdsulteng.com/index.php/token",
       data,
       headers
     ).then((res) => console.log(res.data));

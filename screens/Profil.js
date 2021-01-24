@@ -11,14 +11,18 @@ const Profil = (props) => {
     <View style={styles.profil}>
       {dataUser ? (
         <View>
-          <View style={styles.imageContainer}>
-            <Image
-              source={{
-                uri: `https://dirumahki.online/assets/uploads/users/${dataUser[0].photo}`,
-              }}
-              style={styles.imageUser}
-            />
-          </View>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate("UbahFoto")}
+          >
+            <View style={styles.imageContainer}>
+              <Image
+                source={{
+                  uri: `https://i.imgur.com/${dataUser[0].photo}`,
+                }}
+                style={styles.imageUser}
+              />
+            </View>
+          </TouchableOpacity>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.btn}

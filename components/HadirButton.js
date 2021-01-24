@@ -13,7 +13,7 @@ const HadirButton = (props) => {
   useEffect(() => {
     if (!invite) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/invite?user_invite=${dataUser[0].id}&agenda_invite=${props.agenda}`
+        `https://api.simleg-dprdsulteng.com/index.php/invite?user_invite=${dataUser[0].id}&agenda_invite=${props.agenda}`
       ).then((res) => setInvite(res.data[0]));
     }
   });
@@ -33,12 +33,12 @@ const HadirButton = (props) => {
       "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
     };
     Axios.put(
-      "https://api.dirumahki.online/index.php/invite",
+      "https://api.simleg-dprdsulteng.com/index.php/invite",
       data,
       headers
     ).then((res) => setInvite(res.data));
     Axios.post(
-      "https://api.dirumahki.online/index.php/history",
+      "https://api.simleg-dprdsulteng.com/index.php/history",
       dataHistory,
       headers
     ).then((res) => console.log(res.data));
@@ -55,7 +55,7 @@ const HadirButton = (props) => {
       "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
     };
     Axios.put(
-      "https://api.dirumahki.online/index.php/invite",
+      "https://api.simleg-dprdsulteng.com/index.php/invite",
       data,
       headers
     ).then((res) => setInvite(res.data));

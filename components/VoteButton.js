@@ -13,7 +13,7 @@ const VoteButton = (props) => {
   useEffect(() => {
     if (!vote) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/vote?user_vote=${dataUser[0].id}&agenda_vote=${props.agenda}`
+        `https://api.simleg-dprdsulteng.com/index.php/vote?user_vote=${dataUser[0].id}&agenda_vote=${props.agenda}`
       ).then((res) => setVote(res.data[0]));
     }
   });
@@ -33,12 +33,12 @@ const VoteButton = (props) => {
       "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
     };
     Axios.put(
-      "https://api.dirumahki.online/index.php/vote",
+      "https://api.simleg-dprdsulteng.com/index.php/vote",
       data,
       headers
     ).then((res) => setVote(res.data));
     Axios.post(
-      "https://api.dirumahki.online/index.php/history",
+      "https://api.simleg-dprdsulteng.com/index.php/history",
       dataHistory,
       headers
     ).then((res) => console.log(res.data));
@@ -60,12 +60,12 @@ const VoteButton = (props) => {
       "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
     };
     Axios.put(
-      "https://api.dirumahki.online/index.php/vote",
+      "https://api.simleg-dprdsulteng.com/index.php/vote",
       data,
       headers
     ).then((res) => setVote(res.data));
     Axios.post(
-      "https://api.dirumahki.online/index.php/history",
+      "https://api.simleg-dprdsulteng.com/index.php/history",
       dataHistory,
       headers
     ).then((res) => console.log(res.data));

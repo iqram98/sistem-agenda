@@ -35,7 +35,7 @@ const HasilKegiatan = (props) => {
   useEffect(() => {
     if (dataHasil == null) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/agenda?status_agenda=terlaksana&user=${dataUser[0].id}`
+        `https://api.simleg-dprdsulteng.com/index.php/agenda?status_agenda=terlaksana&user=${dataUser[0].id}`
       ).then((res) => {
         setDataHasil(res.data);
       });

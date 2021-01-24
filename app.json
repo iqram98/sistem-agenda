@@ -3,7 +3,7 @@
     "name": "Simleg",
     "slug": "Simleg",
     "privacy": "public",
-    "version": "1.2.0",
+    "version": "1.2.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -19,17 +19,17 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.pondokinformatigitka.sistemagenda",
-      "buildNumber": "1.2.0"
+      "bundleIdentifier": "com.simlegdprdsulteng.simleg",
+      "buildNumber": "1.2.4"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.pondokinformatika.sistemagenda",
+      "package": "com.simlegdprdsulteng.simleg",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 20
+      "versionCode": 24
     },
     "web": {
       "favicon": "./assets/icon.png"

@@ -39,7 +39,7 @@ const Detail = (props) => {
 
     if (!jumlahBelumVote && detailData && detailData.status_agenda === "vote") {
       Axios.get(
-        `https://api.dirumahki.online/index.php/vote/jumlah/${idAgenda}`
+        `https://api.simleg-dprdsulteng.com/index.php/vote/jumlah/${idAgenda}`
       ).then((res) => setJumlahBelumVote(res.data));
     }
 
@@ -49,7 +49,7 @@ const Detail = (props) => {
       detailData.status_agenda === "undangan"
     ) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/invite/jumlah/${idAgenda}`
+        `https://api.simleg-dprdsulteng.com/index.php/invite/jumlah/${idAgenda}`
       ).then((res) => setJumlahBelumPilih(res.data));
     }
 
@@ -63,7 +63,7 @@ const Detail = (props) => {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
       };
       Axios.put(
-        "https://api.dirumahki.online/index.php/invite",
+        "https://api.simleg-dprdsulteng.com/index.php/invite",
         data,
         headers
       ).then();
@@ -78,7 +78,7 @@ const Detail = (props) => {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
       };
       Axios.put(
-        "https://api.dirumahki.online/index.php/vote",
+        "https://api.simleg-dprdsulteng.com/index.php/vote",
         data,
         headers
       ).then();
@@ -93,7 +93,7 @@ const Detail = (props) => {
           <ImageBackground
             style={styles.background}
             source={{
-              uri: `https://dirumahki.online/assets/uploads/img_rapat/${detailData.img_agenda}`,
+              uri: `https://simleg-dprdsulteng.com/assets/uploads/img_rapat/${detailData.img_agenda}`,
             }}
           >
             <TouchableOpacity
@@ -140,7 +140,7 @@ const Detail = (props) => {
               style={styles.buttonDraft}
               onPress={() => {
                 Linking.openURL(
-                  `https://dirumahki.online/assets/uploads/draft/${detailData.draft_agenda}`
+                  `https://simleg-dprdsulteng.com/assets/uploads/draft/${detailData.draft_agenda}`
                 );
               }}
             >
@@ -212,7 +212,7 @@ const Detail = (props) => {
                   style={styles.buttonHasil}
                   onPress={() => {
                     Linking.openURL(
-                      `https://dirumahki.online/assets/uploads/draft/${detailData.hasil_agenda}`
+                      `https://simleg-dprdsulteng.com/assets/uploads/draft/${detailData.hasil_agenda}`
                     );
                   }}
                 >
@@ -304,12 +304,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 50,
     borderRadius: 10,
-    marginVertical: 10,
+    marginBottom: 50,
+    marginTop: 10,
   },
   tidakDraft: {
     alignSelf: "center",
     color: "red",
-    marginVertical: 10,
+    marginBottom: 50,
+    marginTop: 10,
   },
 });
 

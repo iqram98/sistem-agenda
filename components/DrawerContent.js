@@ -34,7 +34,7 @@ export const DrawerContent = (props) => {
             <View style={{ flexDirection: "row", marginTop: 15 }}>
               <Avatar.Image
                 source={{
-                  uri: `https://dirumahki.online/assets/uploads/users/${dataUser[0].photo}`,
+                  uri: `https://i.imgur.com/${dataUser[0].photo}`,
                 }}
                 size={50}
                 style={{ backgroundColor: "white" }}

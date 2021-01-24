@@ -69,7 +69,7 @@ const History = (props) => {
   useEffect(() => {
     if (!history) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/history?user_history=${dataUser[0].id}`
+        `https://api.simleg-dprdsulteng.com/index.php/history?user_history=${dataUser[0].id}`
       ).then((res) => setHistory(res.data.reverse()));
     }
   });

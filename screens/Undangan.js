@@ -29,7 +29,7 @@ const Undangan = (props) => {
 
   useEffect(() => {
     Axios.get(
-      "https://api.dirumahki.online/index.php/agenda?status_agenda=undangan&user=1"
+      "https://api.simleg-dprdsulteng.com/index.php/agenda?status_agenda=undangan&user=1"
     ).then((res) => {
       setInvites(res.data);
     });
@@ -42,7 +42,7 @@ const Undangan = (props) => {
         <Image
           source={{
             uri:
-              "https://dirumahki.online/assets/uploads/users/d8902-user1.png",
+              "https://simleg-dprdsulteng.com/assets/uploads/users/d8902-user1.png",
           }}
           style={styles.imageUser}
         />

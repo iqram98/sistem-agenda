@@ -54,7 +54,7 @@ const DetailPribadi = (props) => {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
       };
       Axios.put(
-        `https://api.dirumahki.online/index.php/agendapribadi/${detailData.id_agenda}/${dataUser[0].id}`,
+        `https://api.simleg-dprdsulteng.com/index.php/agendapribadi/${detailData.id_agenda}/${dataUser[0].id}`,
         headers
       ).then();
     }
@@ -66,7 +66,7 @@ const DetailPribadi = (props) => {
           <ImageBackground
             style={styles.background}
             source={{
-              uri: `https://dirumahki.online/assets/uploads/img_rapat/${detailData.img_agenda}`,
+              uri: `https://simleg-dprdsulteng.com/assets/uploads/img_rapat/${detailData.img_agenda}`,
             }}
           >
             <TouchableOpacity
@@ -92,6 +92,16 @@ const DetailPribadi = (props) => {
               stylesheet={richTextStyles}
             />
           </View>
+          <TouchableOpacity
+            style={styles.itemBtn}
+            onPress={() =>
+              props.navigation.navigate("ListFoto", {
+                idAgenda,
+              })
+            }
+          >
+            <Text>Lihat Foto</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -178,6 +188,15 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: "red",
     marginVertical: 10,
+  },
+  itemBtn: {
+    alignSelf: "center",
+    height: 35,
+    width: "30%",
+    backgroundColor: Color.buttonTertiary,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
   },
 });
 

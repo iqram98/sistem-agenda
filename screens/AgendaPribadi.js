@@ -48,7 +48,7 @@ const AgendaPribadi = (props) => {
   useEffect(() => {
     if (!pribadi) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/agendapribadi/${dataUser[0].id}`
+        `https://api.simleg-dprdsulteng.com/index.php/agendapribadi/${dataUser[0].id}`
       ).then((res) => setPribadi(res.data));
     }
   });
@@ -59,7 +59,7 @@ const AgendaPribadi = (props) => {
         <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
           <Image
             source={{
-              uri: `https://dirumahki.online/assets/uploads/users/${dataUser[0].photo}`,
+              uri: `https://simleg-dprdsulteng.com/assets/uploads/users/${dataUser[0].photo}`,
             }}
             style={styles.imageUser}
           />

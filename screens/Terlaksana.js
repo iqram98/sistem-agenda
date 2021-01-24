@@ -31,7 +31,7 @@ const Terlaksana = (props) => {
       console.log("refresh");
       try {
         Axios.get(
-          `https://api.dirumahki.online/index.php/invite?user_invite=${dataUser[0].id}`
+          `https://api.simleg-dprdsulteng.com/index.php/invite?user_invite=${dataUser[0].id}`
         ).then((res) => {
           setTerjadwalDatas(res.data);
           setRefreshing(false);

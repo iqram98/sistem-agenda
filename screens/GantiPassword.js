@@ -30,7 +30,7 @@ const GantiPassword = (props) => {
       "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
     };
     Axios.put(
-      "https://api.dirumahki.online/index.php/user/changepassword",
+      "https://api.simleg-dprdsulteng.com/index.php/user/changepassword",
       data,
       headers
     ).then((res) => {

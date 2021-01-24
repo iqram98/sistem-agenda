@@ -34,12 +34,12 @@ const Home = (props) => {
   useEffect(() => {
     if (!calendarData) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/invite?user_invite=${dataUser[0].id}`
+        `https://api.simleg-dprdsulteng.com/index.php/invite?user_invite=${dataUser[0].id}`
       ).then((res) => {
         setInvite(res.data);
       });
       Axios.get(
-        `https://api.dirumahki.online/index.php/vote?user_vote=${dataUser[0].id}`
+        `https://api.simleg-dprdsulteng.com/index.php/vote?user_vote=${dataUser[0].id}`
       ).then((res) => {
         setVote(res.data);
       });
@@ -75,14 +75,14 @@ const Home = (props) => {
             <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
               <Image
                 source={{
-                  uri: `https://dirumahki.online/assets/uploads/users/${dataUser[0].photo}`,
+                  uri: `https://i.imgur.com/${dataUser[0].photo}`,
                 }}
                 style={styles.imageUser}
               />
             </TouchableOpacity>
             <Image
               source={{
-                uri: "https://dirumahki.online/assets/images/logo-sm.png",
+                uri: "https://simleg-dprdsulteng.com/assets/images/logo-sm.png",
               }}
               style={styles.logo}
             />

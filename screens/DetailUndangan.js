@@ -55,7 +55,7 @@ const DetailUndangan = (props) => {
       detailData.status_agenda === "undangan"
     ) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/invite/jumlah/${idAgenda}`
+        `https://api.simleg-dprdsulteng.com/index.php/invite/jumlah/${idAgenda}`
       ).then((res) => setJumlahBelumPilih(res.data));
     }
 
@@ -69,7 +69,7 @@ const DetailUndangan = (props) => {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
       };
       Axios.put(
-        "https://api.dirumahki.online/index.php/invite",
+        "https://api.simleg-dprdsulteng.com/index.php/invite",
         data,
         headers
       ).then();
@@ -98,7 +98,7 @@ const DetailUndangan = (props) => {
           <Image
             style={styles.image}
             source={{
-              uri: `https://dirumahki.online/assets/uploads/img_rapat/${detailData.img_agenda}`,
+              uri: `https://simleg-dprdsulteng.com/assets/uploads/img_rapat/${detailData.img_agenda}`,
             }}
           />
           <View style={styles.titleContainer}>
@@ -119,12 +119,13 @@ const DetailUndangan = (props) => {
               />
             </View>
           </View>
+
           {detailData.draft_agenda !== "" ? (
             <TouchableOpacity
               style={styles.buttonDraft}
               onPress={() => {
                 Linking.openURL(
-                  `https://dirumahki.online/assets/uploads/draft/${detailData.draft_agenda}`
+                  `https://simleg-dprdsulteng.com/assets/uploads/draft/${detailData.draft_agenda}`
                 );
               }}
             >
@@ -241,12 +242,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 50,
     borderRadius: 10,
-    marginVertical: 10,
+    marginBottom: 50,
+    marginTop: 10,
   },
   tidakDraft: {
     alignSelf: "center",
     color: "red",
-    marginVertical: 10,
+    marginBottom: 50,
+    marginTop: 10,
   },
   nav: {
     flexDirection: "row",

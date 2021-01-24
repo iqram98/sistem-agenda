@@ -25,7 +25,7 @@ const DetailHasil = (props) => {
   useEffect(() => {
     if (!hasil) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/file/${detailData.id_agenda}`
+        `https://api.simleg-dprdsulteng.com/index.php/file/${detailData.id_agenda}`
       ).then((res) => {
         setHasil(res.data);
         let img = res.data.filter((hasil) => {
@@ -38,7 +38,7 @@ const DetailHasil = (props) => {
           imgBaru = [
             ...imgBaru,
             {
-              url: `https://dirumahki.online/assets/uploads/hasil/${data.link_file}`,
+              url: `https://simleg-dprdsulteng.com/assets/uploads/hasil/${data.link_file}`,
               nama: data.link_file.substring(6),
             },
           ];
@@ -54,7 +54,7 @@ const DetailHasil = (props) => {
           pdfBaru = [
             ...pdfBaru,
             {
-              url: `https://dirumahki.online/assets/uploads/hasil/${data.link_file}`,
+              url: `https://simleg-dprdsulteng.com/assets/uploads/hasil/${data.link_file}`,
               nama: data.link_file.substring(6),
             },
           ];

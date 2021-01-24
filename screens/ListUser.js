@@ -16,7 +16,7 @@ const ListUser = (props) => {
   useEffect(() => {
     if (!peserta) {
       Axios.get(
-        `https://api.dirumahki.online/index.php/invite/invite2/${idAgenda}`
+        `https://api.simleg-dprdsulteng.com/index.php/invite/invite2/${idAgenda}`
       ).then((res) => setPeserta(res.data));
     }
   });
