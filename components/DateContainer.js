@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Dimensions } from "react-native";
 
 const DateContainer = (props) => {
   return (
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   dateDay: {
-    fontSize: 35,
+    fontSize: Dimensions.get("window").width < 390 ? 20 : 35,
     fontWeight: "bold",
     color: "#3F3F3F",
   },

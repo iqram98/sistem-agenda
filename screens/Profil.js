@@ -1,5 +1,12 @@
 import React, { useContext } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { DataContext } from "../components/DataContext";
 
 import Color from "../constants/Color";
@@ -132,14 +139,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   col1: {
-    width: "20%",
+    width: Dimensions.get("window").width < 390 ? "30%" : "20%",
   },
   col2: {
     width: "20%",
     textAlign: "center",
   },
   col3: {
-    width: "60%",
+    width: Dimensions.get("window").width < 390 ? "40%" : "60%",
   },
   buttonContainer: {
     flexDirection: "row",
@@ -148,7 +155,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   btn: {
-    width: "35%",
+    width: Dimensions.get("window").width < 390 ? "45%" : "35%",
     height: 30,
     backgroundColor: Color.buttonPrimary,
     justifyContent: "center",

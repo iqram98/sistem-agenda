@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Dimensions } from "react-native";
 
 import Color from "../constants/Color";
 import ButtonVote from "../components/ButtonVote";
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
   descStatus: {
     backgroundColor: "white",
-    width: "35%",
+    width: Dimensions.get("window").width < 390 ? "50%" : "35%",
     textAlign: "center",
     color: Color.buttonSecondary,
     borderRadius: 10,
