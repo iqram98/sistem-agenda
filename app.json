@@ -1,37 +1,39 @@
 {
-    "expo": {
-        "name": "Simleg",
-        "slug": "Simleg",
-        "privacy": "public",
-        "version": "1.2.5",
-        "orientation": "portrait",
-        "icon": "./assets/icon.png",
-        "splash": {
-            "image": "./assets/splash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#3198AE"
-        },
-        "updates": {
-            "fallbackToCacheTimeout": 0
-        },
-        "assetBundlePatterns": ["**/*"],
-        "ios": {
-            "supportsTablet": true,
-            "bundleIdentifier": "com.simlegdprdsulteng.simleg",
-            "buildNumber": "1.2.5"
-        },
-        "android": {
-            "adaptiveIcon": {
-                "foregroundImage": "./assets/icon.png",
-                "backgroundColor": "#FFFFFF"
-            },
-            "package": "com.simlegdprdsulteng.simleg",
-            "googleServicesFile": "./google-services.json",
-            "versionCode": 25
-        },
-        "web": {
-            "favicon": "./assets/icon.png"
-        },
-        "description": ""
-    }
+  "expo": {
+    "name": "Simleg",
+    "slug": "Simleg",
+    "privacy": "public",
+    "version": "1.2.5",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#3198AE"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.simlegdprdsulteng.simleg",
+      "buildNumber": "1.2.5"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.simlegdprdsulteng.simleg",
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 25
+    },
+    "web": {
+      "favicon": "./assets/icon.png"
+    },
+    "description": ""
+  }
 }
