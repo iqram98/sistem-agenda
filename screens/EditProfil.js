@@ -201,6 +201,7 @@ const EditProfil = (props) => {
                                 </Picker>
                             </View>
                         </View>
+
                         <View style={styles.formGroup}>
                             <Text style={styles.label}>Dapil</Text>
                             <View style={styles.input}>
